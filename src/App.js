@@ -1,13 +1,14 @@
 import { useState } from "react";
 import Signup from "./components/Signup";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
-import { Button } from "react-bootstrap";
+import Home from "./components/Home";
+import Header from "./components/Header";
 
 function App() {
   const usersData = [
     {
-      name: "test 1",
+      name: "user",
       email: "test@mail.com",
       password: "123",
     },
@@ -19,6 +20,7 @@ function App() {
   ];
 
   const [users, setUsers] = useState(usersData);
+  const [validLogin, setValidLogin] = useState(false);
 
   function addUsers(val) {
     setUsers((preData) => ({
@@ -30,23 +32,14 @@ function App() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Button className="btn-lg m-4" variant="outline-success">
-          <Link to="/login"> Log in</Link>
-        </Button>
-        <Button className="btn-lg m-4" variant="outline-warning">
-          <Link to="/signup">Sign up</Link>
-        </Button>
-      </div>
+      {!validLogin ? <Header validLogin={validLogin} /> : ""}
       <Routes>
-        <Route exact path="/signup" element={<Signup addUsers={addUsers} />} />
-        <Route exact path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup addUsers={addUsers} />} />
+        <Route
+          path="/login"
+          element={<Login users={users} setValidLogin={setValidLogin} />}
+        />
+        <Route path="/home" element={<Home validLogin={validLogin} />} />
       </Routes>
     </div>
   );
